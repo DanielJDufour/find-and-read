@@ -1,6 +1,6 @@
 {
   "name": "find-and-read",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Finding and Reading Files Made a Little Easier",
   "main": "find-and-read.js",
   "files": [
