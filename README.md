@@ -23,7 +23,7 @@ npm install find-and-read
 ```
 
 # basic usage
-Automatically find the closest file with the given name and run readFileSync
+Automatically find the closest file with the given name and run [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) on it
 ```javascript
 const findAndRead = require("find-and-read");
 
@@ -31,7 +31,7 @@ const buffer = findAndRead("example.png");
 ```
 
 # advanced usage
-You can pass in the same options as you would to readFileSync, "encoding" and "flag";
+You can pass in the same options as you would to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options), "encoding" and "flag";
 ```js
 const findAndRead = require("find-and-read");
 
@@ -39,7 +39,7 @@ const json = findAndRead("example.json", { encoding: 'utf-8' });
 ```
 
 #### adjusting start
-When a file calls `findAndRead`, `findAndRead` will start looking in the folder of the caller file.  When you run `findAndRead` in a REPL, it will start looking in the folder where you started the REPL.  If you would like to start at a different place, pass in a `start` parameter like below:
+When a file calls `findAndRead`, it will start looking in the folder of the caller file.  When you run `findAndRead` in a REPL, it will start looking in the folder where you started the REPL.  If you would like to start at a different place, pass in a `start` parameter like below:
 ```js
 const findAndRead = require("find-and-read");
 
@@ -48,7 +48,7 @@ const buffer = findAndRead("image.jpg", { start: '/tmp' });
 ```
 
 #### custom stop function
-By default, find-and-read doesn't navigate into node_modules and hidden folders (like `.git`).  When run inside a git repository, it also doesn't navigate up outside the git repo.  You can turn this off by passing `stop: null` or create own custom function for determining when to stop on a path.
+By default, `findAndRead` doesn't navigate into node_modules and hidden folders (like `.git`).  When run inside a git repository, it also doesn't navigate up outside the git repo.  You can turn this off by passing `stop: null` or create own custom function for determining when to stop on a path.
 ```js
 const findAndRead = require("find-and-read");
 
