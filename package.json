@@ -1,0 +1,35 @@
+{
+  "name": "find-and-read",
+  "version": "0.0.0",
+  "description": "Finding and Reading Files Made a Little Easier",
+  "main": "find-and-read.js",
+  "files": [
+    "find-and-read.js"
+  ],
+  "scripts": {
+    "format": "npx prettier --write *.js */**/*.js",
+    "test": "node test/scripts/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielJDufour/find-and-read.git"
+  },
+  "keywords": [
+    "async",
+    "file",
+    "find",
+    "fs",
+    "grep",
+    "open",
+    "read",
+    "search",
+    "smart",
+    "sync"
+  ],
+  "author": "Daniel J. Dufour",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/DanielJDufour/find-and-read/issues"
+  },
+  "homepage": "https://github.com/DanielJDufour/find-and-read#readme"
+}
