@@ -1,12 +1,20 @@
 const { existsSync, readdirSync, readFileSync } = require("fs");
 const { dirname, join } = require("path");
 
-// by default, stop searching along a path if function returns true 
-const DEFAULT_STOP = ({ dirpath }) => dirpath.includes(".") || dirpath.includes("node_modules");
+// by default, stop searching along a path if function returns true
+const DEFAULT_STOP = ({ dirpath }) =>
+  dirpath.includes(".") || dirpath.includes("node_modules");
 
 const findAndRead = (
   filename,
-  { cwd, debugLevel = 0, encoding = null, flag = "r", maxSteps = 10, stop = DEFAULT_STOP } = {
+  {
+    cwd,
+    debugLevel = 0,
+    encoding = null,
+    flag = "r",
+    maxSteps = 10,
+    stop = DEFAULT_STOP,
+  } = {
     cwd: undefined,
     debugLevel: 0,
     encoding: null,
@@ -41,7 +49,10 @@ const findAndRead = (
         found.push(filepath);
       } else {
         const updirpath = dirname(dirpath);
-        if (updirpath !== ignore && !stop({ dirpath: updirpath })) {
+        if (
+          updirpath !== ignore &&
+          (typeof stop !== "function" || !stop({ dirpath: updirpath }))
+        ) {
           additions.push({ dirpath: updirpath, ignore: dirpath });
         }
 
@@ -49,7 +60,10 @@ const findAndRead = (
           readdirSync(dirpath, { withFileTypes: true }).forEach((dirent) => {
             if (dirent.isDirectory()) {
               const subdirpath = join(dirpath, dirent.name);
-              if (subdirpath !== ignore && !stop({ dirpath: subdirpath })) {
+              if (
+                subdirpath !== ignore &&
+                (typeof stop !== "function" || !stop({ dirpath: subdirpath }))
+              ) {
                 additions.push({ dirpath: subdirpath, ignore: dirpath });
               }
             }

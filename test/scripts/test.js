@@ -35,6 +35,10 @@ test("respecting node_modules boundary", ({ eq }) => {
 });
 
 test("turning off node_modules boundary", ({ eq }) => {
-  const str = findAndRead("file.txt", { encoding: 'utf-8', maxSteps: 10, stop: () => false });
-  eq(str, 'test');
+  const str = findAndRead("file.txt", {
+    encoding: "utf-8",
+    maxSteps: 10,
+    stop: () => false,
+  });
+  eq(str, "test");
 });
