@@ -39,7 +39,7 @@ const json = findAndRead("example.json", { encoding: 'utf-8' });
 ```
 
 #### adjusting start
-When a file calls `findAndRead`, `findAndRead` will start looking in the foldder of the caller file.  When you run `findAndRead` in a REPL, it will start looking in the folder where you started the REPL.  If you would like to start at a different place, pass in a `start` parameter like below:
+When a file calls `findAndRead`, `findAndRead` will start looking in the folder of the caller file.  When you run `findAndRead` in a REPL, it will start looking in the folder where you started the REPL.  If you would like to start at a different place, pass in a `start` parameter like below:
 ```js
 const findAndRead = require("find-and-read");
 
@@ -48,7 +48,7 @@ const buffer = findAndRead("image.jpg", { start: '/tmp' });
 ```
 
 #### custom stop function
-By default, find-and-read doesn't navigate into node_modules and hidden folders (like `.git`).  When run inside a git repository, it also navigate up outside the git repo.  You can turn this off by passing `stop: null` or create own custom function for determining when to stop on a path.
+By default, find-and-read doesn't navigate into node_modules and hidden folders (like `.git`).  When run inside a git repository, it also doesn't navigate up outside the git repo.  You can turn this off by passing `stop: null` or create own custom function for determining when to stop on a path.
 ```js
 const findAndRead = require("find-and-read");
 
