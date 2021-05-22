@@ -54,6 +54,7 @@ or a hidden directory that starts with `.`.  In other words, it won't search ins
 const findAndRead = require("find-and-read");
 
 const buffer = findAndRead("test-image.jpg", {
+  // don't search inside of the env folder
   stop: ({ dirpath }) => dirpath.includes('env');
 });
 ```
