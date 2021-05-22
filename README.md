@@ -38,23 +38,28 @@ const findAndRead = require("find-and-read");
 const json = findAndRead("example.json", { encoding: 'utf-8' });
 ```
 
-By default, find-and-read starts at the directory of the file that called the read function.
-If you would like to start at a different place, pass in the `cwd` parameter.
+#### adjusting start
+When a file calls `findAndRead`, `findAndRead` will start looking in the foldder of the caller file.  When you run `findAndRead` in a REPL, it will start looking in the folder where you started the REPL.  If you would like to start at a different place, pass in a `start` parameter like below:
 ```js
 const findAndRead = require("find-and-read");
 
 // look for an image starting in the /tmp folder
-const buffer = findAndRead("image.jpg", { cwd: '/tmp' });
+const buffer = findAndRead("image.jpg", { start: '/tmp' });
 ```
 
 #### custom stop function
-By default, find-and-read stops searching along a path once it hits a node_modules folder
-or a hidden directory that starts with `.`.  In other words, it won't search inside of your installed packages and if it happens to run inside an installed package, it won't escape the node_modules folder.  You can turn this off by passing `stop: null` or your own custom stop function like:
+By default, find-and-read doesn't navigate into node_modules and hidden folders (like `.git`).  When run inside a git repository, it also navigate up outside the git repo.  You can turn this off by passing `stop: null` or create own custom function for determining when to stop on a path.
 ```js
 const findAndRead = require("find-and-read");
 
 const buffer = findAndRead("test-image.jpg", {
-  // don't search inside of the env folder
-  stop: ({ dirpath }) => dirpath.includes('env');
+  stop: ({
+    dirpath, // the path to the directory that we are navigating to
+    from, // the path to the directory that we are navigating from
+    direction // "up" or "down"
+  }) => {
+    // don't search inside of the env folder
+    return dirpath.includes('env');
+  }
 });
 ```

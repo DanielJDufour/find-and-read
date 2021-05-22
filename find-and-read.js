@@ -2,20 +2,25 @@ const { existsSync, readdirSync, readFileSync } = require("fs");
 const { dirname, join } = require("path");
 
 // by default, stop searching along a path if function returns true
-const DEFAULT_STOP = ({ dirpath }) =>
-  dirpath.includes(".") || dirpath.includes("node_modules");
+const DEFAULT_STOP = ({ dirpath, from, direction }) => {
+  return (
+    dirpath.includes(".") ||
+    dirpath.includes("node_modules") ||
+    (direction === "up" && existsSync(join(from, ".git")))
+  );
+};
 
 const findAndRead = (
   filename,
   {
-    cwd,
+    start,
     debugLevel = 0,
     encoding = null,
     flag = "r",
     maxSteps = 10,
     stop = DEFAULT_STOP,
   } = {
-    cwd: undefined,
+    start: undefined,
     debugLevel: 0,
     encoding: null,
     stop: DEFAULT_STOP,
@@ -23,19 +28,30 @@ const findAndRead = (
     maxSteps: 10,
   }
 ) => {
-  if (!cwd) {
-    const ln = Error().stack.split(/ *\n\r? */g)[2];
+  if (!start) {
+    const stackLines = Error().stack.split(/ *\n\r? */g);
+    if (debugLevel >= 1) console.log("stackLines:", stackLines);
+    const ln = stackLines[2];
+    4;
     if (debugLevel >= 1) console.log("ln:", ln);
-    const caller_file_path = (ln.includes("(")
+    const callerPath = (ln.includes("(")
       ? ln.substring(ln.indexOf("(") + 1, ln.lastIndexOf(")"))
       : ln.replace("at ", "")
     ).split(":")[0];
-    if (debugLevel >= 1) console.log("caller_file_path:", caller_file_path);
-    cwd = dirname(caller_file_path);
+    if (debugLevel >= 1) console.log("callerPath:", callerPath);
+    if (callerPath.startsWith("/")) {
+      start = dirname(callerPath);
+    } else if (process.env.PWD) {
+      start = process.env.PWD;
+    } else {
+      throw new Error(
+        "[find-and-read] unable to determine where to start.  Please initialize findAndRead with a start parameter"
+      );
+    }
   }
-  if (debugLevel >= 1) console.log("[find-and-read] cwd:", cwd);
+  if (debugLevel >= 1) console.log("[find-and-read] start:", start);
 
-  let dirpaths = [{ dirpath: cwd, ignore: null }];
+  let dirpaths = [{ dirpath: start, ignore: null }];
   for (let i = 0; i < maxSteps; i++) {
     if (debugLevel >= 2) console.log("[find-and-read] step:", i);
     let found = [];
@@ -51,7 +67,8 @@ const findAndRead = (
         const updirpath = dirname(dirpath);
         if (
           updirpath !== ignore &&
-          (typeof stop !== "function" || !stop({ dirpath: updirpath }))
+          (typeof stop !== "function" ||
+            !stop({ dirpath: updirpath, from: dirpath, direction: "up" }))
         ) {
           additions.push({ dirpath: updirpath, ignore: dirpath });
         }
@@ -62,7 +79,12 @@ const findAndRead = (
               const subdirpath = join(dirpath, dirent.name);
               if (
                 subdirpath !== ignore &&
-                (typeof stop !== "function" || !stop({ dirpath: subdirpath }))
+                (typeof stop !== "function" ||
+                  !stop({
+                    dirpath: subdirpath,
+                    from: dirpath,
+                    direction: "down",
+                  }))
               ) {
                 additions.push({ dirpath: subdirpath, ignore: dirpath });
               }

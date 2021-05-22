@@ -42,3 +42,11 @@ test("turning off node_modules boundary", ({ eq }) => {
   });
   eq(str, "test");
 });
+
+test("respecting git boundary", ({ eq }) => {
+  const str = findAndRead("index.js", {
+    encoding: "utf-8",
+    maxSteps: 10,
+  });
+  eq(str, undefined);
+});
