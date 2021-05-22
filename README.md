@@ -3,7 +3,7 @@
 
 # what?
 This library exposes a single function `findAndRead`, which takes in a filename.
-It iteratively searches up, down and across you folder for the file.
+It iteratively searches up, down and across your folder hierarchy for the file.
 When it finds the file, it runs NodeJS' built-in [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) on it.
 
 # why?
