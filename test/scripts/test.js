@@ -28,3 +28,13 @@ test("limiting steps", ({ eq }) => {
   });
   eq(pkgjson, undefined);
 });
+
+test("respecting node_modules boundary", ({ eq }) => {
+  const buffer = findAndRead("file.txt", { maxSteps: 10 });
+  eq(buffer, undefined);
+});
+
+test("turning off node_modules boundary", ({ eq }) => {
+  const str = findAndRead("file.txt", { encoding: 'utf-8', maxSteps: 10, stop: () => false });
+  eq(str, 'test');
+});

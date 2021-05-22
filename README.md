@@ -46,3 +46,7 @@ const findAndRead = require("find-and-read");
 // look for an image starting in the /tmp folder
 const buffer = findAndRead("image.jpg", { cwd: '/tmp' });
 ```
+
+By default, find-and-read stops searching along a path once it hits a node_modules folder.
+In other words, it won't search inside of a node_modules folder and if it happens to run inside a node_modules folder, it won't escape the node_modules folder.  You can turn 
+this off by passing `stop: null` or your own custom stop function like `stop: ({ dirpath }) => dirpath.includes('env')`;
