@@ -1,10 +1,13 @@
 const { existsSync, lstatSync, readdirSync, readFileSync } = require("fs");
 const { dirname, join } = require("path");
 
+// does the path to a file or directory include a hidden file or folder
+const isHidden = path => path.startsWith(".") || path.includes("/.");
+
 // by default, stop searching along a path if function returns true
 const DEFAULT_STOP = ({ dirpath, from, direction }) => {
   return (
-    dirpath.includes(".") ||
+    isHidden(dirpath) ||
     dirpath.includes("node_modules") ||
     (direction === "up" && existsSync(join(from, ".git")))
   );
@@ -18,14 +21,14 @@ const findAndRead = (
     encoding = null,
     flag = "r",
     maxSteps = 10,
-    stop = DEFAULT_STOP,
+    stop = DEFAULT_STOP
   } = {
     start: undefined,
     debugLevel: 0,
     encoding: null,
     stop: DEFAULT_STOP,
     flag: "r",
-    maxSteps: 10,
+    maxSteps: 10
   }
 ) => {
   if (!start) {
@@ -59,9 +62,10 @@ const findAndRead = (
     for (let ii = 0; ii < dirpaths.length; ii++) {
       const { dirpath, ignore } = dirpaths[ii];
       if (debugLevel >= 3) console.log("[find-and-read] dirpath:", dirpath);
+      if (debugLevel >= 3) console.log("\t[find-and-read] ignore:", ignore);
       const filepath = join(dirpath, filename);
       if (existsSync(filepath) && !lstatSync(filepath).isDirectory()) {
-        if (debugLevel >= 3) console.log("[find-and-read] found:", filepath);
+        if (debugLevel >= 3) console.log("\t[find-and-read] found:", filepath);
         found.push(filepath);
       } else {
         const updirpath = dirname(dirpath);
@@ -74,18 +78,32 @@ const findAndRead = (
         }
 
         try {
-          readdirSync(dirpath, { withFileTypes: true }).forEach((dirent) => {
+          readdirSync(dirpath, { withFileTypes: true }).forEach(dirent => {
+            if (debugLevel >= 3)
+              console.log("\t[find-and-read] dirent.name:", dirent.name);
+            if (debugLevel >= 3)
+              console.log(
+                "\t[find-and-read] dirent.isDirectory():",
+                dirent.isDirectory()
+              );
             if (dirent.isDirectory()) {
               const subdirpath = join(dirpath, dirent.name);
+              if (debugLevel >= 3)
+                console.log("\t[find-and-read] subdirpath:", subdirpath);
               if (
                 subdirpath !== ignore &&
                 (typeof stop !== "function" ||
                   !stop({
                     dirpath: subdirpath,
                     from: dirpath,
-                    direction: "down",
+                    direction: "down"
                   }))
               ) {
+                if (debugLevel >= 3)
+                  console.log("\t[find-and-read] adding:", {
+                    dirpath: subdirpath,
+                    ignore: dirpath
+                  });
                 additions.push({ dirpath: subdirpath, ignore: dirpath });
               }
             }
