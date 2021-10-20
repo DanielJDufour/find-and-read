@@ -1,4 +1,4 @@
-const { existsSync, readdirSync, readFileSync } = require("fs");
+const { existsSync, lstatSync, readdirSync, readFileSync } = require("fs");
 const { dirname, join } = require("path");
 
 // by default, stop searching along a path if function returns true
@@ -60,7 +60,7 @@ const findAndRead = (
       const { dirpath, ignore } = dirpaths[ii];
       if (debugLevel >= 3) console.log("[find-and-read] dirpath:", dirpath);
       const filepath = join(dirpath, filename);
-      if (existsSync(filepath)) {
+      if (existsSync(filepath) && !lstatSync(filepath).isDirectory()) {
         if (debugLevel >= 3) console.log("[find-and-read] found:", filepath);
         found.push(filepath);
       } else {
