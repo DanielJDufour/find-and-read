@@ -21,14 +21,16 @@ const findAndRead = (
     encoding = null,
     flag = "r",
     maxSteps = 10,
-    stop = DEFAULT_STOP
+    stop = DEFAULT_STOP,
+    warn = true
   } = {
     start: undefined,
     debugLevel: 0,
     encoding: null,
     stop: DEFAULT_STOP,
     flag: "r",
-    maxSteps: 10
+    maxSteps: 10,
+    warn: true
   }
 ) => {
   if (!start) {
@@ -124,6 +126,7 @@ const findAndRead = (
       );
     }
   }
+  if (warn) console.warn(`[find-and-read] unable to find "${filename}"`);
 };
 
 module.exports = findAndRead;

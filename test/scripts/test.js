@@ -24,13 +24,14 @@ test("reading file up", ({ eq }) => {
 test("limiting steps", ({ eq }) => {
   const pkgjson = findAndRead("package.json", {
     encoding: "utf-8",
-    maxSteps: 1
+    maxSteps: 1,
+    warn: false
   });
   eq(pkgjson, undefined);
 });
 
 test("respecting node_modules boundary", ({ eq }) => {
-  const buffer = findAndRead("file.txt", { maxSteps: 10 });
+  const buffer = findAndRead("file.txt", { maxSteps: 10, warn: false });
   eq(buffer, undefined);
 });
 
@@ -46,7 +47,8 @@ test("turning off node_modules boundary", ({ eq }) => {
 test("respecting git boundary", ({ eq }) => {
   const str = findAndRead("index.js", {
     encoding: "utf-8",
-    maxSteps: 10
+    maxSteps: 10,
+    warn: false
   });
   eq(str, undefined);
 });
@@ -54,4 +56,13 @@ test("respecting git boundary", ({ eq }) => {
 test("reading file inside folder with same name", ({ eq }) => {
   const str = findAndRead("test.txt", { debugLevel: 0, encoding: "utf-8" });
   eq(str, "test");
+});
+
+test("warn", ({ eq }) => {
+  const str = findAndRead("index.js", {
+    encoding: "utf-8",
+    maxSteps: 10,
+    warn: true
+  });
+  eq(str, undefined);
 });

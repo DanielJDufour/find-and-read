@@ -63,3 +63,16 @@ const buffer = findAndRead("test-image.jpg", {
   }
 });
 ```
+
+#### warnings
+By default, `findAndRead` will issue a console.warn if it's unable to find a file.
+You can turn off this behavior by passing in `warn: false`.
+```js
+const findAndRead = require("find-and-read");
+
+findAndRead("unfindable.txt");
+// logs `[find-and-read] unable to find "unfindable.txt"`
+
+findAndRead("unfindable.txt", { warn: false });
+// nothing is logged
+```
