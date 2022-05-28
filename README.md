@@ -16,6 +16,7 @@ It would be a lot easier if I could just run `findAndRead("example.png")`, so I 
 - Automatically Finds Closest Matching File (least amount of change directory steps)
 - Small Code Base
 - Memory Efficient
+- TypeScript Support
 
 # install
 ```bash
