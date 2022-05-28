@@ -3,12 +3,16 @@
   "version": "1.1.0",
   "description": "Finding and Reading Files Made a Little Easier",
   "main": "find-and-read.js",
+  "types": "./find-and-read.d.ts",
   "files": [
-    "find-and-read.js"
+    "find-and-read.js",
+    "find-and-read.d.ts"
   ],
   "scripts": {
     "format": "npx prettier --arrow-parens=avoid --trailing-comma=none --write *.js */**/*.js",
-    "test": "node test/scripts/test.js"
+    "test:js": "node test/scripts/test.js",
+    "test:ts": "npx ts-node test/scripts/test.ts",
+    "test": "npm run test:js && npm run test:ts"
   },
   "repository": {
     "type": "git",
@@ -31,5 +35,8 @@
   "bugs": {
     "url": "https://github.com/DanielJDufour/find-and-read/issues"
   },
-  "homepage": "https://github.com/DanielJDufour/find-and-read#readme"
+  "homepage": "https://github.com/DanielJDufour/find-and-read#readme",
+  "devDependencies": {
+    "flug": "^2.3.1"
+  }
 }

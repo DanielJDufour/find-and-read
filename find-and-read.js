@@ -130,3 +130,4 @@ const findAndRead = (
 };
 
 module.exports = findAndRead;
+module.exports.default = findAndRead;
